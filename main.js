@@ -18,10 +18,10 @@ for (var name in Game.spawns) {
     spawn.utils = utils;
 
     for (var role in config.roles) {
-        var config = config.roles[role];
+        var roleConfig = config.roles[role];
 
         if (!spawn.spawning) {
-            factory.makeCreep(spawn, role, config);
+            factory.makeCreep(spawn, role, roleConfig);
         }
     }
 }
