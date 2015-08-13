@@ -1,4 +1,5 @@
 Spawn.prototype.createHarvester = function(name) {
+    console.log('create harvester');
     return this.createCreep([WORK, WORK, CARRY, MOVE], name, { role: 'harvester' });
 };
 
@@ -9,6 +10,7 @@ Spawn.prototype.canCreateHarvester = function() {
 };
 
 Spawn.prototype.createUpgrader = function(name) {
+    console.log('create upgrader');
     return this.createCreep([WORK, CARRY, CARRY, MOVE], name, { role: 'upgrader' });
 };
 
@@ -19,6 +21,7 @@ Spawn.prototype.canCreateUpgrader = function() {
 };
 
 Spawn.prototype.createGuard = function(name) {
+    console.log('create guard');
     return this.createCreep([ATTACK, TOUGH, MOVE], name, { role: 'guard' });
 };
 
