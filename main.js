@@ -2,7 +2,8 @@ require('extensions');
 
 var actions = {
     'guard': require('guard'),
-    'harvester': require('harvester')
+    'harvester': require('harvester'),
+    'upgrader': require('upgrader')
 };
 
 for (var name in Game.creeps) {
