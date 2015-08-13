@@ -1,47 +1,48 @@
-require('extensions');
+var factory = require('factory');
 
 var actions = {
     'guard': require('guard'),
     'harvester': require('harvester'),
-    'upgrader': require('upgrader')
+    'upgrader': require('upgrader'),
+    'collector': require('collector')
 };
 
 for (var name in Game.creeps) {
     var creep = Game.creeps[name];
     var role = creep.memory.role;
-
-    actions[role](creep);
+    
+    if(creep.memory.role){
+        actions[role](creep);
+    }
 }
 
 for (var name in Game.spawns) {
     var spawn = Game.spawns[name];
-    var nextNum = numCreeps + 1;
 
-    var actions = {
-        'harvester': function (role, nextNum) {
-            if (spawn.canCreateHarvester() && numCreeps <= 5) {
-                var creepName = role + nextNum;
-                spawn.createHarvester(creepName);
-            }
+    var roles = {
+        'guard': {
+            limit: 0,
+            body: [TOUGH, TOUGH, ATTACK, ATTACK, MOVE]
         },
-        'guard': function (role, nextNum) {
-            if (false && spawn.canCreateGuard() && numCreeps <= 10) {
-                var creepName = role + nextNum;
-                spawn.createGuard(creepName);
-            }
+        'upgrader': {
+            limit: 3,
+            body: [WORK, CARRY, CARRY, MOVE, MOVE]
         },
-        'upgrader': function (role, nextNum) {
-            if (spawn.canCreateUpgrader() && numCreeps <= 10) {
-                var creepName = role + nextNum;
-                spawn.createUpgrader(creepName);
-            }
+        'harvester': {
+            limit: 3,
+            body: [WORK, WORK, CARRY, MOVE]
+        },
+        'collector': {
+            limit: 2,
+            body: [CARRY, CARRY, CARRY, MOVE, MOVE, MOVE]
         }
     };
 
-    for (var action in actions) {
-        var numCreeps = Object.keys(Game.creeps).length;
-        actions[action](action, numCreeps);
+    for (var role in roles) {
+        var config = roles[role];
+
+        if (!spawn.spawning) {
+            factory.makeCreep(spawn, role, config);
+        }
     }
 }
-
-// git
