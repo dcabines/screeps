@@ -4,7 +4,8 @@ var actions = {
     'guard': require('guard'),
     'harvester': require('harvester'),
     'upgrader': require('upgrader'),
-    'collector': require('collector')
+    'collector': require('collector'),
+    'builder': require('builder')
 };
 
 for (var name in Game.creeps) {
@@ -36,6 +37,10 @@ for (var name in Game.spawns) {
         'collector': {
             limit: 2,
             body: [CARRY, CARRY, CARRY, MOVE, MOVE, MOVE]
+        },
+        'builder': {
+            limit: 2,
+            body: [WORK, CARRY, CARRY, MOVE, MOVE]
         }
     };
 
