@@ -1,11 +1,21 @@
 Spawn.prototype.createHarvester = function(name) {
-    return this.createCreep([WORK, CARRY, MOVE], name, { role: 'harvester' });
+    return this.createCreep([WORK, WORK, CARRY, MOVE], name, { role: 'harvester' });
 };
 
-Spawn.prototype.createHarvester.cost = 100 + 50 + 50;
+Spawn.prototype.createHarvester.cost = 100 + 100 + 50 + 50;
 
 Spawn.prototype.canCreateHarvester = function() {
     return this.energy > this.createHarvester.cost && this.spawning === null;
+};
+
+Spawn.prototype.createUpgrader = function(name) {
+    return this.createCreep([WORK, CARRY, CARRY, MOVE], name, { role: 'upgrader' });
+};
+
+Spawn.prototype.createUpgrader.cost = 100 + 50 + 50 + 50;
+
+Spawn.prototype.canCreateUpgrader = function() {
+    return this.energy > this.createUpgrader.cost && this.spawning === null;
 };
 
 Spawn.prototype.createGuard = function(name) {

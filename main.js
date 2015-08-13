@@ -28,6 +28,12 @@ for (var name in Game.spawns) {
                 var creepName = role + nextNum;
                 spawn.createGuard(creepName);
             }
+        },
+        'upgrader': function (role, nextNum) {
+            if (spawn.canCreateUpgrader() && numCreeps <= 10) {
+                var creepName = role + nextNum;
+                spawn.createUpgrader(creepName);
+            }
         }
     };
 

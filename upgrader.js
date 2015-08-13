@@ -10,8 +10,8 @@ module.exports = function (creep) {
 		creep.memory.action = 'harvesting';
 	}
 	else {
-		creep.moveTo(Game.spawns.Spawn1);
-        creep.transferEnergy(Game.spawns.Spawn1);
-        creep.memory.action = 'feeding';
+		creep.moveTo(creep.room.controller);
+        creep.upgradeController(creep.room.controller);
+        creep.memory.action = 'upgrading';
 	}
 }
