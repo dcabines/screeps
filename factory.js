@@ -9,13 +9,5 @@ module.exports = {
         if (numExisting < config.limit && canCreate) {
             spawn.createCreep(config.body, undefined, memory);
         }
-    },
-
-    killRole: function (role) {
-        var creeps = _.filter(Game.creeps, { memory: { role: role } });
-
-        for (var index in creeps) {
-            creeps[index].suicide();
-        }
     }
 };

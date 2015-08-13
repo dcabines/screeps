@@ -1,51 +1,24 @@
+var utils = require('utils');
+var config = require('config');
 var factory = require('factory');
 
-var actions = {
-    'guard': require('guard'),
-    'harvester': require('harvester'),
-    'upgrader': require('upgrader'),
-    'collector': require('collector'),
-    'builder': require('builder')
-};
-
+// run the creeps
 for (var name in Game.creeps) {
     var creep = Game.creeps[name];
     var role = creep.memory.role;
-    
-    if(creep.memory.role){
-        actions[role](creep);
+
+    if (creep.memory.role) {
+        config.actions[role](creep);
     }
 }
 
+// run the spawns
 for (var name in Game.spawns) {
     var spawn = Game.spawns[name];
-    spawn.killRole = factory.killRole;
+    spawn.utils = utils;
 
-    var roles = {
-        'guard': {
-            limit: 0,
-            body: [TOUGH, TOUGH, ATTACK, ATTACK, MOVE]
-        },
-        'upgrader': {
-            limit: 3,
-            body: [WORK, CARRY, CARRY, MOVE, MOVE]
-        },
-        'harvester': {
-            limit: 3,
-            body: [WORK, WORK, CARRY, MOVE]
-        },
-        'collector': {
-            limit: 2,
-            body: [CARRY, CARRY, CARRY, MOVE, MOVE, MOVE]
-        },
-        'builder': {
-            limit: 2,
-            body: [WORK, CARRY, CARRY, MOVE, MOVE]
-        }
-    };
-
-    for (var role in roles) {
-        var config = roles[role];
+    for (var role in config.roles) {
+        var config = config.roles[role];
 
         if (!spawn.spawning) {
             factory.makeCreep(spawn, role, config);
