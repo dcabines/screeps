@@ -24,7 +24,7 @@ for (var name in Game.spawns) {
             }
         },
         'guard': function (role, nextNum) {
-            if (spawn.canCreateGuard() && numCreeps <= 10) {
+            if (false && spawn.canCreateGuard() && numCreeps <= 10) {
                 var creepName = role + nextNum;
                 spawn.createGuard(creepName);
             }
