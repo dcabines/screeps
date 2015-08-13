@@ -18,6 +18,7 @@ for (var name in Game.creeps) {
 
 for (var name in Game.spawns) {
     var spawn = Game.spawns[name];
+    spawn.killRole = factory.killRole;
 
     var roles = {
         'guard': {
