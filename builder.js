@@ -43,7 +43,7 @@ module.exports = function (creep) {
 			creep.memory.target = null;
 			
 			// repair roads
-			var roads = creep.room.find(FIND_MY_STRUCTURES, {
+			var roads = creep.room.find(FIND_STRUCTURES, {
 				filter: { structureType: STRUCTURE_ROAD }
 			});
 
@@ -59,9 +59,31 @@ module.exports = function (creep) {
 
 			if (!filter.length) {
 				filter = _.filter(sites, function (r) {
-					return r.hits < (r.hitsMax - 500);
+					return r.hits < (r.hitsMax * 0.9);
 				});
 			}
+
+			if (filter.length) {
+				var target = creep.pos.findClosest(filter);
+
+				creep.moveTo(target);
+				var ok = creep.repair(target);
+
+				if (ok === OK) {
+					creep.memory.target = target.id;
+				}
+
+				return;
+			}
+			
+			// repair walls
+			var walls = creep.room.find(FIND_STRUCTURES, {
+				filter: { structureType: STRUCTURE_WALL }
+			});
+
+			var filter = _.filter(walls, function (r) {
+				return r.hits < 100000 && r.hitsMax != 1;
+			});
 
 			if (filter.length) {
 				var target = creep.pos.findClosest(filter);
@@ -111,7 +133,7 @@ module.exports = function (creep) {
 
 			if (!filter.length) {
 				filter = _.filter(sites, function (r) {
-					return r.hits < (r.hitsMax - 100000);
+					return r.hits < (r.hitsMax * 0.9);
 				});
 			}
 

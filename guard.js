@@ -1,5 +1,5 @@
 module.exports = function (creep) {
-    var targets = creep.room.find(FIND_HOSTILE_CREEPS);
+    var targets = creep.pos.findInRange(FIND_HOSTILE_CREEPS, 2);
 
     if (targets.length) {
         creep.moveTo(targets[0]);

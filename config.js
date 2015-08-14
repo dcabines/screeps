@@ -9,8 +9,8 @@ module.exports = {
 
     roles: {
         'guard': {
-            limit: 0,
-            body: [TOUGH, TOUGH, ATTACK, ATTACK, MOVE]
+            limit: 2,
+            body: [TOUGH, TOUGH, TOUGH, TOUGH, ATTACK, ATTACK, MOVE, MOVE]
         },
         'upgrader': {
             limit: 3,
@@ -21,11 +21,11 @@ module.exports = {
             body: [WORK, WORK, CARRY, MOVE]
         },
         'collector': {
-            limit: 2,
+            limit: 3,
             body: [CARRY, CARRY, CARRY, MOVE, MOVE, MOVE]
         },
         'builder': {
-            limit: 2,
+            limit: 4,
             body: [WORK, WORK, WORK, CARRY, CARRY, MOVE]
         }
     }
