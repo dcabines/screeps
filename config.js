@@ -14,7 +14,7 @@ module.exports = {
         },
         'upgrader': {
             limit: 3,
-            body: [WORK, CARRY, CARRY, MOVE, MOVE]
+            body: [WORK, WORK, CARRY, CARRY, MOVE]
         },
         'harvester': {
             limit: 3,
@@ -26,7 +26,7 @@ module.exports = {
         },
         'builder': {
             limit: 2,
-            body: [WORK, CARRY, CARRY, MOVE, MOVE]
+            body: [WORK, WORK, WORK, CARRY, CARRY, MOVE]
         }
     }
 };

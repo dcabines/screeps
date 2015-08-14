@@ -1,4 +1,3 @@
-var utils = require('utils');
 var config = require('config');
 var factory = require('factory');
 
@@ -15,7 +14,6 @@ for (var name in Game.creeps) {
 // run the spawns
 for (var name in Game.spawns) {
     var spawn = Game.spawns[name];
-    spawn.utils = utils;
 
     for (var role in config.roles) {
         var roleConfig = config.roles[role];

@@ -11,33 +11,66 @@ module.exports = function (creep) {
 
 	var actions = {
 		'refueling': function () {
-			creep.moveTo(Game.spawns.Spawn1);
+			var extensions = creep.room.find(FIND_MY_STRUCTURES, {
+				filter: { structureType: STRUCTURE_EXTENSION }
+			});
 
-			var amount = Game.spawns.Spawn1.energy > creep.carryCapacity;
-			amount = amount ? creep.carryCapacity : Game.spawns.Spawn1.energy;
+			for (var index in extensions) {
+				var extension = extensions[index];
 
-			Game.spawns.Spawn1.transferEnergy(creep, amount);
+				if (extension.energy > 0) {
+					creep.moveTo(extension);
+					extension.transferEnergy(creep);
+					return;
+				}
+			}
 		},
 		'upgrading': function () {
+			if (creep.memory.target) {
+				var target = Game.getObjectById(creep.memory.target);
+
+				if (target) {
+					var ok = creep.repair(target);
+
+					if (ok === OK) {
+						return;
+					}
+				}
+			}
+			
+			creep.memory.target = null;
+
 			var sites = creep.room.find(FIND_MY_STRUCTURES, {
 				filter: { structureType: STRUCTURE_RAMPART }
 			});
 
-			var site = _.min(sites, function (s) {
-				return s.hits;
-			});
+			var weakSites = _.sortByOrder(sites, ['hits'], ['asc']);
 
-			creep.moveTo(site);
-			creep.repair(site);
+			for (var index in weakSites) {
+				var site = weakSites[index];
+
+				creep.moveTo(site);
+				var ok = creep.repair(site);
+
+				if (ok === OK) {
+					creep.memory.target = site.id;
+				}
+
+				return;
+			}
 		},
 		'building': function () {
 			var sites = creep.room.find(FIND_CONSTRUCTION_SITES);
-			
+
 			creep.moveTo(sites[0]);
 			creep.build(sites[0]);
 		}
 	};
 
-	actions[creep.memory.action]();
+	var action = actions[creep.memory.action];
+
+	if (action) {
+		action();
+	}
 }
 	
