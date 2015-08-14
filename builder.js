@@ -15,17 +15,19 @@ module.exports = function (creep) {
 				filter: { structureType: STRUCTURE_EXTENSION }
 			});
 
-			for (var index in extensions) {
-				var extension = extensions[index];
+			extensions = _.filter(extensions, function (r) {
+				return r.energy > 0;
+			});
 
-				if (extension.energy > 0) {
-					creep.moveTo(extension);
-					extension.transferEnergy(creep);
-					return;
-				}
+			if (extensions.length) {
+				var target = creep.pos.findClosest(extensions);
+
+				creep.moveTo(target);
+				target.transferEnergy(creep);
 			}
 		},
 		'upgrading': function () {
+			// finish current target
 			if (creep.memory.target) {
 				var target = Game.getObjectById(creep.memory.target);
 
@@ -37,23 +39,90 @@ module.exports = function (creep) {
 					}
 				}
 			}
-			
-			creep.memory.target = null;
 
+			creep.memory.target = null;
+			
+			// repair roads
+			var roads = creep.room.find(FIND_MY_STRUCTURES, {
+				filter: { structureType: STRUCTURE_ROAD }
+			});
+
+			var filter = _.filter(roads, function (r) {
+				return r.hits < (r.hitsMax / 4);
+			});
+
+			if (!filter.length) {
+				filter = _.filter(sites, function (r) {
+					return r.hits < (r.hitsMax / 2);
+				});
+			}
+
+			if (!filter.length) {
+				filter = _.filter(sites, function (r) {
+					return r.hits < (r.hitsMax - 500);
+				});
+			}
+
+			if (filter.length) {
+				var target = creep.pos.findClosest(filter);
+
+				creep.moveTo(target);
+				var ok = creep.repair(target);
+
+				if (ok === OK) {
+					creep.memory.target = target.id;
+				}
+
+				return;
+			}
+			
+			// repair ramparts
 			var sites = creep.room.find(FIND_MY_STRUCTURES, {
 				filter: { structureType: STRUCTURE_RAMPART }
 			});
 
-			var weakSites = _.sortByOrder(sites, ['hits'], ['asc']);
+			var filter = _.filter(sites, function (r) {
+				return r.hits < (r.hitsMax / 20);
+			});
 
-			for (var index in weakSites) {
-				var site = weakSites[index];
+			if (!filter.length) {
+				filter = _.filter(sites, function (r) {
+					return r.hits < (r.hitsMax / 15);
+				});
+			}
 
-				creep.moveTo(site);
-				var ok = creep.repair(site);
+			if (!filter.length) {
+				filter = _.filter(sites, function (r) {
+					return r.hits < (r.hitsMax / 10);
+				});
+			}
+
+			if (!filter.length) {
+				filter = _.filter(sites, function (r) {
+					return r.hits < (r.hitsMax / 5);
+				});
+			}
+
+			if (!filter.length) {
+				filter = _.filter(sites, function (r) {
+					return r.hits < (r.hitsMax / 2);
+				});
+			}
+
+			if (!filter.length) {
+				filter = _.filter(sites, function (r) {
+					return r.hits < (r.hitsMax - 100000);
+				});
+			}
+
+			if (filter.length) {
+				var target = creep.pos.findClosest(filter);
+
+				creep.moveTo(target);
+				var ok = creep.repair(target);
 
 				if (ok === OK) {
-					creep.memory.target = site.id;
+					creep.memory.target = target.id;
 				}
 
 				return;

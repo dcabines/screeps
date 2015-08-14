@@ -1,9 +1,5 @@
 module.exports = function (creep) {
 	var energy = creep.room.find(FIND_DROPPED_ENERGY);
-
-	var extensions = creep.room.find(FIND_MY_STRUCTURES, {
-		filter: { structureType: STRUCTURE_EXTENSION }
-	});
 	
 	// collect
     if (creep.carry.energy === 0 && energy.length) {
@@ -13,24 +9,32 @@ module.exports = function (creep) {
     }
 	
 	// feed spawns
-	for (var index in Game.spawns) {
-		var spawn = Game.spawns[index];
+	var spawns = _.filter(Game.spawns, function (r) {
+		return r.energy < r.energyCapacity;
+	});
 
-		if (spawn.energy < spawn.energyCapacity) {
-			creep.moveTo(spawn);
-			creep.transferEnergy(spawn);
-			return;
-		}
+	if (spawns.length) {
+		var target = creep.pos.findClosest(spawns);
+
+		creep.moveTo(target);
+		creep.transferEnergy(target);
+		return;
 	}
 	
 	// feed extensions
-	for (var index in extensions) {
-		var extension = extensions[index];
+	var extensions = creep.room.find(FIND_MY_STRUCTURES, {
+		filter: { structureType: STRUCTURE_EXTENSION }
+	});
 
-		if (extension.energy < extension.energyCapacity) {
-			creep.moveTo(extension);
-			creep.transferEnergy(extension);
-			return;
-		}
+	extensions = _.filter(extensions, function (r) {
+		return r.energy < r.energyCapacity;
+	});
+
+	if (extensions.length) {
+		var target = creep.pos.findClosest(extensions);
+
+		creep.moveTo(target);
+		creep.transferEnergy(target);
+		return;
 	}
 }
